@@ -2,10 +2,10 @@
 import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 
-// GitHub Pages project site нь repo нэрийн доор байрладаг тул build хийхэд
-// base хэрэгтэй. Dev server-т base '/' хэвээр — localhost:5173 өөрчлөгдөхгүй.
-export default defineConfig(({ command }) => ({
-  base: command === 'build' ? '/zardal-huwiarlalt/' : '/',
+// Апп домэйны root дээр байрлана, тиймээс base нь build болон dev хоёуланд
+// '/'. Өмнө нь GitHub Pages-ийн дэд зам байсан ч тэр сайт байхгүй болсон.
+export default defineConfig(() => ({
+  base: '/',
   plugins: [react()],
   server: {
     port: 5173,
