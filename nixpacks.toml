@@ -1,4 +1,14 @@
-# GitHub Pages дээр base нь /zardal-huwiarlalt/, харин Railway дээр апп
-# домэйны root дээр сууна — тиймээс энд base-ийг '/' болгож build хийнэ.
+# Node 24 хүсэж байна: package-lock.json нь npm 11-ээр үүсгэгдсэн бөгөөд
+# npm 10 үүнийг "Missing: @esbuild/... from lock file" гэж унагадаг.
+[variables]
+NIXPACKS_NODE_VERSION = "24"
+
+# NIXPACKS_NODE_VERSION хүчин төгөлдөр болоогүй тохиолдолд ч build нь
+# унахгүй байхын тулд npm ci биш npm install — сүүлийнх нь lockfile-ийн
+# форматын зөрүүг өөрөө засдаг тул npm 10 дээр ч ажиллана.
+[phases.install]
+cmds = ["npm install --no-audit --no-fund"]
+
+# Апп нь домэйны root дээр сууна.
 [phases.build]
 cmds = ["npm run build -- --base=/"]
