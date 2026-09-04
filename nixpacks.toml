@@ -1,0 +1,4 @@
+# GitHub Pages дээр base нь /zardal-huwiarlalt/, харин Railway дээр апп
+# домэйны root дээр сууна — тиймээс энд base-ийг '/' болгож build хийнэ.
+[phases.build]
+cmds = ["npm run build -- --base=/"]
