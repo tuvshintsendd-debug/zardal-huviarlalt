@@ -1,12 +1,27 @@
+import { useState } from 'react'
 import { fireEvent, render, screen } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { OrgUnitInput } from './OrgUnitInput'
 import { Step1BaseInput } from './Step1BaseInput'
 import { Step2CostCalculation } from './Step2CostCalculation'
 
+// Step1BaseInput нь төлвөө localStorage-д бичдэг тул цэвэрлэхгүй бол өмнөх
+// тестийн багана/мөр дараагийнхад нь дамжина.
+beforeEach(() => {
+  window.localStorage.clear()
+})
+
+// OrgUnitInput нь controlled — жагсаалт нь units prop-оос ирнэ. Тиймээс
+// onChange-ийг буцаагаад prop руу нь холбож өгөхгүй бол нэмсэн нэр гарч
+// ирэхгүй.
+function OrgUnitInputHarness() {
+  const [units, setUnits] = useState<string[]>([])
+  return <OrgUnitInput units={units} onChange={setUnits} />
+}
+
 describe('OrgUnitInput', () => {
   it('шинэ алба нэгж нэмэхэд давхардлыг зөвшөөрөхгүй', () => {
-    render(<OrgUnitInput units={[]} onChange={() => undefined} />)
+    render(<OrgUnitInputHarness />)
 
     fireEvent.change(screen.getByPlaceholderText('Алба нэгжийн нэр'), {
       target: { value: 'Санхүү хэлтэс' },
@@ -34,7 +49,9 @@ describe('Step1BaseInput', () => {
     )
 
     expect(screen.getByText('Эхлээд алба нэгжээ оруулна уу.')).toBeTruthy()
-  expect(screen.getByRole('button', { name: 'Мөр нэмэх' }).hasAttribute('disabled')).toBe(true)
+    // Алба нэгж байхгүй бол хүснэгт бүхэлдээ харагдахгүй тул "Мөр нэмэх"
+    // товч disabled биш, огт байхгүй байна.
+    expect(screen.queryByRole('button', { name: 'Мөр нэмэх' })).toBeNull()
   })
 
   it('олж буй алба нэгжүүдээс dropdown-оор сонгоно', () => {
@@ -45,8 +62,17 @@ describe('Step1BaseInput', () => {
       />,
     )
 
-    expect(screen.getAllByRole('combobox').length).toBeGreaterThan(0)
+    // Эхэндээ мөр байхгүй тул dropdown бас байхгүй — мөр нэмсний дараа л
+    // алба нэгжийн select болон үзүүлэлтийн checkbox үүснэ.
+    expect(screen.queryAllByRole('combobox')).toHaveLength(0)
+
     fireEvent.click(screen.getByRole('button', { name: 'Мөр нэмэх' }))
+
+    const unitSelect = screen.getByRole('combobox', { name: 'Алба нэгж сонгох' })
+    expect(unitSelect).toBeTruthy()
+    expect(
+      screen.getAllByRole('option').map((option) => option.textContent),
+    ).toEqual(['Алба нэгж сонгох', 'Санхүү хэлтэс', 'Үйлдвэрлэлийн хэлтэс'])
     expect(screen.getAllByRole('checkbox').length).toBeGreaterThan(0)
   })
 
@@ -63,7 +89,7 @@ describe('Step1BaseInput', () => {
     expect(screen.queryByRole('button', { name: 'Бүтээгдэхүүн оруулах' })).toBeNull()
   })
 
-  it('алба нэгжийн карт дээр Excel экспортлох товч харагдана', () => {
+  it('алба нэгжийн карт дээр Excel оруулах товч харагдана', () => {
     render(
       <Step2CostCalculation
         rows={[{ unit: 'ХТЭҮйлдвэр', indicators: { 'Тоолуурын бодит хэрэглээ': true } }]}
@@ -71,7 +97,9 @@ describe('Step1BaseInput', () => {
       />,
     )
 
-    expect(screen.getByRole('button', { name: 'Excel экспортлох' })).toBeTruthy()
+    // Бүтээгдэхүүн бүртгээгүй үед товч харагддаг ч дарах боломжгүй.
+    const importButton = screen.getByRole('button', { name: 'Excel оруулах' })
+    expect(importButton.hasAttribute('disabled')).toBe(true)
   })
 
   it('импорт хадгалсны дараа ч ХТЭЙлдвэрийн ерөнхий Зардал талбар харагдана', () => {
