@@ -20,8 +20,14 @@ import { Toast, type ToastMessage } from './components/ui/Toast'
 import { AllocationPage } from './components/allocation/AllocationPage'
 import { AccountReconciliationModal } from './components/accountMapping/AccountReconciliationModal'
 import { loadAllocationBases } from './services/allocation'
+import type { AuthUser } from './services/workspaceSync'
 
-export default function App() {
+interface AppProps {
+  user: AuthUser | null
+  onLogout: () => void
+}
+
+export default function App({ user, onLogout }: AppProps) {
   const { bills, updateBill, removeBill, addMany, replaceAll } = useBills()
   const allocationBases = loadAllocationBases()
   const [selectedPeriod, setSelectedPeriod] = useState('all')
@@ -187,6 +193,8 @@ export default function App() {
   return (
     <div className="app">
       <AppHeader
+        user={user}
+        onLogout={onLogout}
         periods={periods}
         selectedPeriod={selectedPeriod}
         onPeriodChange={setSelectedPeriod}

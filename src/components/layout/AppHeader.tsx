@@ -1,7 +1,10 @@
 import { useRef } from 'react'
 import { formatPeriod } from '../../utils/format'
+import type { AuthUser } from '../../services/workspaceSync'
 
 interface AppHeaderProps {
+  user: AuthUser | null
+  onLogout: () => void
   periods: string[]
   selectedPeriod: string
   onPeriodChange: (period: string) => void
@@ -14,6 +17,8 @@ interface AppHeaderProps {
 }
 
 export function AppHeader({
+  user,
+  onLogout,
   periods,
   selectedPeriod,
   onPeriodChange,
@@ -39,6 +44,7 @@ export function AppHeader({
       </div>
 
       <div className="topbar__actions">
+        {user && <span className="topbar__account" title={user.email}>{user.companyName ?? user.companyId} · {user.email}</span>}
         <label className="period-select">
           <span className="period-select__label">Тайлант үе</span>
           <select
@@ -103,6 +109,7 @@ export function AppHeader({
         >
           Дансны харгалзаа
         </button>
+        <button type="button" className="btn btn--secondary" onClick={onLogout}>Гарах</button>
       </div>
     </header>
   )

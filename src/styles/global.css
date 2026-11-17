@@ -1,3 +1,104 @@
+.login-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  padding: 24px;
+  background: linear-gradient(135deg, #edf5f2 0%, #f8faf8 48%, #f5eee4 100%);
+}
+
+.login-gate__card {
+  width: min(100%, 440px);
+  display: grid;
+  gap: 16px;
+  padding: 30px;
+  background: #fff;
+  border: 1px solid #dce5df;
+  border-radius: 8px;
+  box-shadow: 0 16px 48px rgb(34 54 44 / 12%);
+}
+
+.login-gate__card .card__title {
+  font-size: 21px;
+  line-height: 1.3;
+}
+
+.login-gate__card .card__subtitle {
+  font-size: 14px;
+}
+
+.login-gate__field {
+  display: grid;
+  gap: 7px;
+  color: #34443b;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.login-gate__field input,
+.login-gate__field select {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  color: #1d2922;
+  background: #fbfcfb;
+  border: 1px solid #cbd6ce;
+  border-radius: 4px;
+  font: inherit;
+}
+
+.login-gate__field input:focus,
+.login-gate__field select:focus {
+  outline: 3px solid rgb(25 115 79 / 16%);
+  border-color: #19734f;
+}
+
+.login-gate__actions,
+.login-gate__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.login-gate__notice {
+  padding: 10px 12px;
+  color: #165b3d;
+  background: #eaf5ee;
+  border: 1px solid #c8e3d1;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.login-gate__back {
+  justify-self: start;
+  padding: 0;
+  color: #176345;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+}
+
+.topbar__account {
+  max-width: 280px;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 560px) {
+  .login-gate { padding: 14px; }
+  .login-gate__card { padding: 22px 18px; }
+  .login-gate__actions,
+  .login-gate__links { justify-content: stretch; }
+  .login-gate__actions > *,
+  .login-gate__links > * { flex: 1 1 100%; }
+}
 :root {
   --bg: #e9edf2;
   --surface: #ffffff;

@@ -5,13 +5,17 @@
   "type": "module",
   "description": "Ашиглалтын зардал (цахилгаан, дулаан, ус) тооцох, хуваарилах дотоод веб апп",
   "scripts": {
-    "dev": "vite",
+    "dev": "node backend/dev.js",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:auth": "node --test backend/tests/auth.test.js"
   },
   "dependencies": {
+    "dotenv": "^18.0.10",
+    "express": "^4.22.2",
+    "pg": "^8.23.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "xlsx": "^0.18.5"
@@ -30,5 +34,8 @@
   },
   "allowScripts": {
     "esbuild@0.21.5": true
+  },
+  "overrides": {
+    "qs": "^6.16.2"
   }
 }

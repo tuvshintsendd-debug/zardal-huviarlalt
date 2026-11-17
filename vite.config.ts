@@ -10,6 +10,9 @@ export default defineConfig(() => ({
   server: {
     port: 5173,
     open: true,
+    proxy: {
+      '/api': 'http://127.0.0.1:3000',
+    },
   },
   // Railway/Nixpacks дээр preview server нь платформын домэйн дор ажиллана.
   // Vite 5.4-ийн preview.allowedHosts default нь localhost-оос бусдыг блоклодог.
@@ -20,5 +23,6 @@ export default defineConfig(() => ({
   test: {
     environment: 'jsdom',
     globals: true,
+    include: ['src/**/*.test.{ts,tsx}'],
   },
 }))
